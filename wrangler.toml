@@ -1,3 +1,10 @@
 name              = "line-gemini-bot"
-main              = "worker.js"      # エントリーファイルを指定
-compatibility_date = "2025-04-28"   # 今日の日付
+main              = "worker.js"
+compatibility_date = "2025-04-29"
+
+[triggers]           # ← GUI の Cron と同じ
+  crons = [
+    "0 22 * * *",    # JST 07:00
+    "0 4  * * *",    # JST 13:00
+    "0 12 * * *"     # JST 21:00
+  ]

@@ -1,0 +1,30 @@
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Wrangler
+        run: npm i -g wrangler@4
+
+      # シークレットを Cloudflare に投入
+      - name: Put CF Secrets
+        run: |
+          echo "${{ secrets.CHANNEL_SECRET }}"        | wrangler secret put CHANNEL_SECRET        --yes
+          echo "${{ secrets.CHANNEL_ACCESS_TOKEN }}"  | wrangler secret put CHANNEL_ACCESS_TOKEN  --yes
+          echo "${{ secrets.GEMINI_API_KEY }}"        | wrangler secret put GEMINI_API_KEY        --yes
+          echo "${{ secrets.MY_USER_ID }}"            | wrangler secret put MY_USER_ID            --yes
+          # SYSTEM_PROMPT は任意
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+      - name: Deploy Worker
+        run: wrangler deploy
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
