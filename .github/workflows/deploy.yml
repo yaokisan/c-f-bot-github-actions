@@ -16,10 +16,10 @@ jobs:
       # シークレットを Cloudflare に投入
       - name: Put CF Secrets
         run: |
-          echo "${{ secrets.CHANNEL_SECRET }}"       | wrangler --non-interactive secret put CHANNEL_SECRET
-          echo "${{ secrets.CHANNEL_ACCESS_TOKEN }}" | wrangler --non-interactive secret put CHANNEL_ACCESS_TOKEN
-          echo "${{ secrets.GEMINI_API_KEY }}"       | wrangler --non-interactive secret put GEMINI_API_KEY
-          echo "${{ secrets.MY_USER_ID }}"           | wrangler --non-interactive secret put MY_USER_ID
+          echo "${{ secrets.CHANNEL_SECRET }}"       | wrangler secret put CHANNEL_SECRET        --non-interactive
+          echo "${{ secrets.CHANNEL_ACCESS_TOKEN }}" | wrangler secret put CHANNEL_ACCESS_TOKEN  --non-interactive
+          echo "${{ secrets.GEMINI_API_KEY }}"       | wrangler secret put GEMINI_API_KEY        --non-interactive
+          echo "${{ secrets.MY_USER_ID }}"           | wrangler secret put MY_USER_ID            --non-interactive
           # SYSTEM_PROMPT は任意
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
