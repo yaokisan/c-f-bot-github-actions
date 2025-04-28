@@ -20,7 +20,7 @@ jobs:
           echo "${{ secrets.CHANNEL_ACCESS_TOKEN }}" | wrangler secret put CHANNEL_ACCESS_TOKEN
           echo "${{ secrets.GEMINI_API_KEY }}"       | wrangler secret put GEMINI_API_KEY
           echo "${{ secrets.MY_USER_ID }}"           | wrangler secret put MY_USER_ID
-          # SYSTEM_PROMPT は任意
+          echo "${{ secrets.SYSTEM_PROMPT }}"        | wrangler secret put SYSTEM_PROMPT
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
