@@ -8,6 +8,24 @@ export default {
       if (request.method !== "POST") {
         return new Response("OK");        // GET などは健全性チェック用
       }
+
+      // === 手動 /cron テスト用エンドポイント ===
+      const url = new URL(request.url);
+      if (url.pathname === "/cron") {
+        const jstNow = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+        await fetch("https://api.line.me/v2/bot/message/push", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${env.CHANNEL_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            to: env.MY_USER_ID,
+            messages: [{ type: "text", text: `⏰ 手動テスト\n${jstNow}` }]
+          })
+        });
+        return new Response("cron ok");   // ここで早期終了（署名検証をスキップ）
+      }
   
       // --- 署名検証 ----------------------------------------------------------
       const body = await request.text();
@@ -25,9 +43,7 @@ export default {
       if (event?.type !== "message" || event.message.type !== "text") {
         return new Response("No-op");
       }
-  
       const userText = event.message.text;
-      console.log("userId:", event.source.userId);
   
       // --- Gemini 2.0 Flash で応答生成 --------------------------------------
       const geminiRes = await fetch(
