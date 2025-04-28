@@ -27,6 +27,7 @@ export default {
       }
   
       const userText = event.message.text;
+      console.log("userId:", event.source.userId);
   
       // --- Gemini 2.0 Flash で応答生成 --------------------------------------
       const geminiRes = await fetch(
